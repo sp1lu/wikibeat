@@ -161,12 +161,11 @@ function AudioVisualizer() {
                 `
             ;
 
-        const mat = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
-
-        const geo = new THREE.IcosahedronGeometry(4, 30);
-        const mesh = new THREE.Mesh(geo, mat);
-        scene.add(mesh);
+        const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
+        const geometry = new THREE.IcosahedronGeometry(4, 30);
+        const mesh = new THREE.Mesh(geometry, material);
         mesh.material.wireframe = true;
+        scene.add(mesh);
 
         const listener = new THREE.AudioListener();
         camera.add(listener);
@@ -209,6 +208,7 @@ function AudioVisualizer() {
 
         let mouseX = 0;
         let mouseY = 0;
+
         document.addEventListener('mousemove', function (e) {
             let windowHalfX = window.innerWidth / 2;
             let windowHalfY = window.innerHeight / 2;
@@ -217,6 +217,7 @@ function AudioVisualizer() {
         });
 
         const clock = new THREE.Clock();
+
         function animate() {
             camera.position.x += (mouseX - camera.position.x) * .05;
             camera.position.y += (-mouseY - camera.position.y) * 0.5;
@@ -226,8 +227,7 @@ function AudioVisualizer() {
             bloomComposer.render();
             requestAnimationFrame(animate);
         }
-        animate();
-
+        
         const onWindowResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -235,8 +235,9 @@ function AudioVisualizer() {
             bloomComposer.setSize(window.innerWidth, window.innerHeight);
             containerRef.current?.appendChild(renderer.domElement);
         }
-
+        
         window.addEventListener('resize', onWindowResize);
+        animate();
 
         return () => {
             window.removeEventListener('resize', onWindowResize);
