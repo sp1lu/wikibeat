@@ -9,7 +9,8 @@ function AudioVisualizer() {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if (!containerRef) return;
+        const container = containerRef.current;
+        if (!container) return;
 
         /** Properties */
         const scene = new THREE.Scene();
@@ -28,6 +29,9 @@ function AudioVisualizer() {
         /** Methods */
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         const renderScene = new RenderPass(scene, camera);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.innerHTML = '';
+        container.appendChild(renderer.domElement);
 
         const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0, 0, 0);
         bloomPass.threshold = params.threshold;
@@ -227,22 +231,27 @@ function AudioVisualizer() {
             bloomComposer.render();
             requestAnimationFrame(animate);
         }
-        
+
         const onWindowResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
             bloomComposer.setSize(window.innerWidth, window.innerHeight);
-            containerRef.current?.appendChild(renderer.domElement);
+            // containerRef.current?.appendChild(renderer.domElement);
         }
-        
+
         window.addEventListener('resize', onWindowResize);
         animate();
 
         return () => {
             window.removeEventListener('resize', onWindowResize);
+            gui.destroy();
             renderer.dispose();
             scene.clear();
+
+            if (container.contains(renderer.domElement)) {
+                container.removeChild(renderer.domElement);
+            }
         };
     }, []);
 
