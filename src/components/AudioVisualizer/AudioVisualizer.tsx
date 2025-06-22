@@ -1,12 +1,21 @@
 /** Libraries */
-import { useEffect, useRef } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+
 import * as THREE from 'three'
-import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js';
-import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js'
+import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
+
+/** Models */
+export interface AudioVisualizerHandle {
+    playSound: (url: string) => void;
+}
 
 /** Component */
-function AudioVisualizer() {
+const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHandle>) => {
+    /** Hooks */
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const audioLoaderRef = useRef<THREE.AudioLoader | null>(null);
+    const soundRef = useRef<THREE.Audio | null>(null);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -26,13 +35,19 @@ function AudioVisualizer() {
             radius: 0.8
         }
 
-        /** Methods */
+        /** Scene creation */
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         const renderScene = new RenderPass(scene, camera);
+
+        camera.position.set(0, -2, 14);
+        camera.lookAt(0, 0, 0);
+
         renderer.setSize(window.innerWidth, window.innerHeight);
+
         container.innerHTML = '';
         container.appendChild(renderer.domElement);
 
+        /** Bloom */
         const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0, 0, 0);
         bloomPass.threshold = params.threshold;
         bloomPass.strength = params.strength;
@@ -45,9 +60,7 @@ function AudioVisualizer() {
         const outputPass = new OutputPass();
         bloomComposer.addPass(outputPass);
 
-        camera.position.set(0, -2, 14);
-        camera.lookAt(0, 0, 0);
-
+        /** Shaders */
         const uniforms = {
             u_time: { type: 'f', value: 0.0 },
             u_frequency: { type: 'f', value: 0.0 },
@@ -151,7 +164,7 @@ function AudioVisualizer() {
                     vec3 newPosition = position + normal * displacement;
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
                 }
-                `
+            `
             ;
 
         const fragmentShader =
@@ -162,30 +175,23 @@ function AudioVisualizer() {
                 void main() {
                     gl_FragColor = vec4(vec3(u_red, u_green, u_blue), 1. );
                 }
-                `
+            `
             ;
 
+        /** Mesh and material */
         const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
         const geometry = new THREE.IcosahedronGeometry(4, 30);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.material.wireframe = true;
         scene.add(mesh);
 
+        /** Audio */
         const listener = new THREE.AudioListener();
         camera.add(listener);
+        soundRef.current = new THREE.Audio(listener);
+        const analyser = new THREE.AudioAnalyser(soundRef.current, 32);
 
-        const sound = new THREE.Audio(listener);
-
-        // const audioLoader = new THREE.AudioLoader();
-        // audioLoader.load('./assets/Beats.mp3', function (buffer) {
-        //     sound.setBuffer(buffer);
-        //     window.addEventListener('click', function () {
-        //         sound.play();
-        //     });
-        // });
-
-        const analyser = new THREE.AudioAnalyser(sound, 32);
-
+        /** GUI */
         const gui = new GUI();
 
         const colorsFolder = gui.addFolder('Colors');
@@ -210,6 +216,7 @@ function AudioVisualizer() {
             bloomPass.radius = Number(value);
         });
 
+        /** Events */
         let mouseX = 0;
         let mouseY = 0;
 
@@ -220,6 +227,7 @@ function AudioVisualizer() {
             mouseY = (e.clientY - windowHalfY) / 100;
         });
 
+        /** Animation */
         const clock = new THREE.Clock();
 
         function animate() {
@@ -231,18 +239,19 @@ function AudioVisualizer() {
             bloomComposer.render();
             requestAnimationFrame(animate);
         }
+        animate();
 
+        /** On resize event */
         const onWindowResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
             bloomComposer.setSize(window.innerWidth, window.innerHeight);
-            // containerRef.current?.appendChild(renderer.domElement);
         }
 
         window.addEventListener('resize', onWindowResize);
-        animate();
 
+        /** Cleanup */
         return () => {
             window.removeEventListener('resize', onWindowResize);
             gui.destroy();
@@ -255,9 +264,25 @@ function AudioVisualizer() {
         };
     }, []);
 
+    useImperativeHandle(ref, () => ({
+        playSound: (url: string) => {
+            if (!audioLoaderRef.current) audioLoaderRef.current = new THREE.AudioLoader();
+            audioLoaderRef.current.load(url, (buffer: AudioBuffer) => {
+                if (!soundRef.current) return;
+
+                soundRef.current.stop();
+                soundRef.current.setBuffer(buffer);
+                soundRef.current.setLoop(false);
+                soundRef.current.setVolume(0.5);
+                soundRef.current.play();
+            })
+        },
+    }));
+
+    /** View */
     return (
         <div ref={containerRef} style={{ height: '100%', width: '100%' }}></div>
     )
-}
+})
 
 export default AudioVisualizer

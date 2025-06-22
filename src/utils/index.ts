@@ -1,1 +1,2 @@
-export * from './feed.utils'
+export* from './calc.util'
+export * from './feed.util'
