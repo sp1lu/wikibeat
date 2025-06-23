@@ -5,6 +5,9 @@ import * as THREE from 'three'
 import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 
+/** Styles */
+import './AudioVisualizer.scss'
+
 /** Models */
 export interface AudioVisualizerHandle {
     playSound: (url: string) => void;
@@ -23,7 +26,7 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
 
         /** Properties */
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color('#2F2A60');
+        // scene.background = new THREE.Color('#2F2A60');
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000);
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true,  });
 
@@ -181,7 +184,7 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
 
         /** Mesh and material */
         const material = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
-        const geometry = new THREE.IcosahedronGeometry(4, 30);
+        const geometry = new THREE.IcosahedronGeometry(2, 15);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.material.wireframe = true;
         scene.add(mesh);

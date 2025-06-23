@@ -2,6 +2,9 @@
 import { useRef, useState } from 'react';
 import useEventSource from '../../hooks/useEventSource'
 
+/** Styles */
+import './Feed.scss'
+
 /** Data */
 import { AUDIO } from '../../data';
 
@@ -38,6 +41,10 @@ function FeedPage() {
     return (
         <div className='feed-page'>
             <button type="button" style={{ position: 'fixed' }} onClick={() => setIsAudio(true)}>PLAY</button>
+            <select className='select'>
+                <option value="en">English</option>
+                <option value="it">Italian</option>
+            </select>
             <AudioManager ref={audioManagerRef} isAudio={isAudio} />
             <AudioVisualizer ref={audioVisualizerRef} />
         </div>
