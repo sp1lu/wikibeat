@@ -1,0 +1,88 @@
+.feed-page {
+    height: 100dvh;
+    width: 100dvw;
+    background-color: black;
+}
+
+.toggle-audio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    height: 100dvh;
+    width: 100dvw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.toggle-audio__btn {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100dvw;
+    height: 100dvh;
+}
+
+.pulse {
+    text-transform: uppercase;
+    animation: pulse 1.5s infinite alternate;
+}
+
+.edits {
+    position: absolute;
+    top: 24%;
+    left: 4%;
+    max-height: calc(100dvh - 48%);
+    overflow-y: auto;
+    scrollbar-width: 0;
+    color: rgba(255, 255, 255, .75);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 40%);
+    mask-image: linear-gradient(to bottom, transparent, black 40%);
+}
+
+.edits::-webkit-scrollbar {
+    display: none;
+}
+
+.edit__url {
+    color: inherit;
+    text-decoration: none;
+}
+
+.select {
+    cursor: pointer;
+    position: fixed;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 48px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, .3);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, .25);
+    border-radius: 8px;
+    backdrop-filter: blur(3px) saturate(2);
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="white"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: .2;
+    }
+}

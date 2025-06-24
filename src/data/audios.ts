@@ -1,4 +1,4 @@
-export const AUDIO: Map<number, string> = new Map([
+export const AUDIOS: Map<number, string> = new Map([
     [1, '/audio/C2v10.mp3'],
     [2, '/audio/C3v10.mp3'],
     [3, '/audio/C4v10.mp3'],

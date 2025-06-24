@@ -5,9 +5,6 @@ import * as THREE from 'three'
 import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 
-/** Styles */
-import './AudioVisualizer.scss'
-
 /** Models */
 export interface AudioVisualizerHandle {
     playSound: (url: string) => void;
@@ -28,15 +25,15 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
         const scene = new THREE.Scene();
         // scene.background = new THREE.Color('#2F2A60');
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true,  });
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, });
 
         const params = {
-            red: 1.0,
-            green: 1.0,
+            red: 0.0,
+            green: 0.3,
             blue: 1.0,
-            threshold: 0.5,
-            strength: 0.5,
-            radius: 0.8
+            threshold: 0.2,
+            strength: 1.0,
+            radius: 1
         }
 
         /** Scene creation */
@@ -72,6 +69,10 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
             u_green: { type: 'f', value: 1.0 },
             u_blue: { type: 'f', value: 1.0 }
         }
+
+        uniforms.u_red.value = params.red;
+        uniforms.u_green.value = params.green;
+        uniforms.u_blue.value = params.blue;
 
         const vertexShader =
             `
@@ -196,29 +197,29 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
         const analyser = new THREE.AudioAnalyser(soundRef.current, 32);
 
         /** GUI */
-        const gui = new GUI();
+        // const gui = new GUI();
 
-        const colorsFolder = gui.addFolder('Colors');
-        colorsFolder.add(params, 'red', 0, 1).onChange(function (value) {
-            uniforms.u_red.value = Number(value);
-        });
-        colorsFolder.add(params, 'green', 0, 1).onChange(function (value) {
-            uniforms.u_green.value = Number(value);
-        });
-        colorsFolder.add(params, 'blue', 0, 1).onChange(function (value) {
-            uniforms.u_blue.value = Number(value);
-        });
+        // const colorsFolder = gui.addFolder('Colors');
+        // colorsFolder.add(params, 'red', 0, 1).onChange(function (value) {
+        //     uniforms.u_red.value = Number(value);
+        // });
+        // colorsFolder.add(params, 'green', 0, 1).onChange(function (value) {
+        //     uniforms.u_green.value = Number(value);
+        // });
+        // colorsFolder.add(params, 'blue', 0, 1).onChange(function (value) {
+        //     uniforms.u_blue.value = Number(value);
+        // });
 
-        const bloomFolder = gui.addFolder('Bloom');
-        bloomFolder.add(params, 'threshold', 0, 1).onChange(function (value) {
-            bloomPass.threshold = Number(value);
-        });
-        bloomFolder.add(params, 'strength', 0, 3).onChange(function (value) {
-            bloomPass.strength = Number(value);
-        });
-        bloomFolder.add(params, 'radius', 0, 1).onChange(function (value) {
-            bloomPass.radius = Number(value);
-        });
+        // const bloomFolder = gui.addFolder('Bloom');
+        // bloomFolder.add(params, 'threshold', 0, 1).onChange(function (value) {
+        //     bloomPass.threshold = Number(value);
+        // });
+        // bloomFolder.add(params, 'strength', 0, 3).onChange(function (value) {
+        //     bloomPass.strength = Number(value);
+        // });
+        // bloomFolder.add(params, 'radius', 0, 1).onChange(function (value) {
+        //     bloomPass.radius = Number(value);
+        // });
 
         /** Events */
         let mouseX = 0;
@@ -258,7 +259,7 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
         /** Cleanup */
         return () => {
             window.removeEventListener('resize', onWindowResize);
-            gui.destroy();
+            // gui.destroy();
             renderer.dispose();
             scene.clear();
 
