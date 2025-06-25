@@ -23,6 +23,7 @@ function FeedPage() {
     const audioManagerRef = useRef<AudioManagerHandle>(null);
     const audioVisualizerRef = useRef<AudioVisualizerHandle>(null);
     const lastEditRef = useRef<HTMLParagraphElement>(null);
+    const audioPanToggleRef = useRef<boolean>(false);
 
     /** States */
     const [isAudio, setIsAudio] = useState<boolean>(false);
@@ -39,13 +40,13 @@ function FeedPage() {
             let audioKey = (data.id && typeof data.id === 'number') ? reduceNumber(data.id) : 1;
             if (audioKey < 1 || audioKey > 6) audioKey = 1;
 
-            // console.log(data);
+            console.log(data);
 
             let pitch = 1;
             if (data.length && data.length.old && data.length.new) pitch = ((Math.abs(data.length.old - data.length.new) % 2) + 2) % 2;
 
-            audioManagerRef.current?.playNote(AUDIOS.get(audioKey) ?? '/audio/C2v10.mp3', pitch);
-            audioVisualizerRef.current?.playSound(AUDIOS.get(audioKey) ?? '/audio/C2v10.mp3');
+            const audioUrl: string = AUDIOS.get(audioKey) ?? '/audio/C2v10.mp3';
+            playAlternateNode(audioUrl, pitch);
         }
     }, [data, selectedLanguage]);
 
@@ -63,6 +64,16 @@ function FeedPage() {
         setSelectedLanguage(value);
     }
 
+    /** Methods */
+    const playAlternateNode = (audioUrl: string, pitch: number) => {
+        if (!audioManagerRef.current || !audioVisualizerRef.current) return;
+
+        audioManagerRef.current.playNote(audioUrl, pitch, audioPanToggleRef ? 1 : -1);
+        audioVisualizerRef.current.playSound(audioUrl);
+
+        audioPanToggleRef.current = !audioPanToggleRef.current;
+    }
+
     /** View */
     return (
         <div className='feed-page'>
@@ -74,7 +85,7 @@ function FeedPage() {
                     null
             }
 
-            <DialogMenu buttonText='Credits' buttonStyle={{position: 'fixed', top: '24px', right: '24px'}}>
+            <DialogMenu buttonText='Credits' buttonStyle={{ position: 'fixed', top: '24px', right: '24px' }}>
                 <div>
                     <Credit role='Designer' name='Davide Rivolta' />
                     <Credit role='Developer' name='Davide Rivolta' />
