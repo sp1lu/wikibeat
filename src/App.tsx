@@ -11,7 +11,7 @@ import './App.css'
 /** App */
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/wikibeat'>
       <Routes>
         <Route path='/' Component={FeedPage}></Route>
         <Route path='*' Component={NotFoundPage}></Route>
