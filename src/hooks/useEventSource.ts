@@ -21,8 +21,8 @@ const useEventSource = (url: string) => {
 
         eventSource.onerror = (err: any) => {
             setError(err);
+            setIsOpen(false);
             console.error('EventSource failed:', err);
-            eventSource.close();
         };
 
         return () => {
