@@ -86,16 +86,14 @@ function FeedPage() {
             }
 
             <DialogMenu buttonText='Credits' buttonStyle={{ position: 'fixed', top: '24px', right: '24px' }}>
-                <div>
-                    <Credit role='Designer' name='Davide Rivolta' />
-                    <Credit role='Developer' name='Davide Rivolta' />
-                    <Credit role='Inspired by' name='Listen to Wikipedia' url='http://listen.hatnote.com/' />
-                    <Credit role='' name='BitListen' url='https://www.bitlisten.com/' />
-                    <Credit role='Icosahedron by' name='Wael Yasmina' url='https://waelyasmina.net/articles/how-to-create-a-3d-audio-visualizer-using-three-js/' />
-                    <Credit role='Tech stack' name='React' />
-                    <Credit role='' name='Three js' />
-                    <Credit role='' name='Typescript' />
-                </div>
+                <Credit role='Designer' name='Davide Rivolta' url='https://www.daviderivolta.com/' />
+                <Credit role='Developer' name='Davide Rivolta' url='https://www.daviderivolta.com/' />
+                <Credit role='Inspired by' name='Listen to Wikipedia' url='http://listen.hatnote.com/' />
+                <Credit role='' name='BitListen' url='https://www.bitlisten.com/' />
+                <Credit role='Icosahedron by' name='Wael Yasmina' url='https://waelyasmina.net/articles/how-to-create-a-3d-audio-visualizer-using-three-js/' />
+                <Credit role='Tech stack' name='React' />
+                <Credit role='' name='Three js' />
+                <Credit role='' name='Typescript' />
             </DialogMenu>
 
             <select className='select' onChange={(e) => onSelectChange(e)}>

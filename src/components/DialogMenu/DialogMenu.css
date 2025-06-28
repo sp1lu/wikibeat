@@ -1,4 +1,5 @@
 .toggle {
+    position: relative;
     background-color: transparent;
     border: none;
     transition: .2s ease-in-out;
@@ -13,13 +14,45 @@
 
 .dialog {
     width: 400px;
-    height: 400px;
-    backdrop-filter: blur(2px);
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, .5);
+    max-width: 92%;
+    max-height: 400px;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .1);
     border-radius: 16px;
+    padding: 40px;
 
     &::backdrop {
         background-color: rgba(0, 0, 0, .25);
     }
+}
+
+.close-btn-wrapper {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.close-btn {
+    color: white;
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+    height: 24px;
+    width: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+
+.dialog__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }

@@ -23,7 +23,6 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
 
         /** Properties */
         const scene = new THREE.Scene();
-        // scene.background = new THREE.Color('#2F2A60');
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000);
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, });
 
