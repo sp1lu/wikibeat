@@ -31,7 +31,7 @@ function FeedPage() {
     const [edits, setEdits] = useState<{ id: string, title: string, url: string }[]>([]);
 
     /** Hooks */
-    const { data, error, isOpen } = useEventSource('https://stream.wikimedia.org/v2/stream/recentchange');
+    const { data } = useEventSource('https://stream.wikimedia.org/v2/stream/recentchange');
 
     useEffect(() => {
         if (filterWikimediaFeed(data, selectedLanguage)) {

@@ -2,7 +2,6 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 
 import * as THREE from 'three'
-import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import { EffectComposer, OutputPass, RenderPass, UnrealBloomPass } from 'three/examples/jsm/Addons.js'
 
 /** Models */
@@ -194,31 +193,6 @@ const AudioVisualizer = forwardRef((_, ref: React.ForwardedRef<AudioVisualizerHa
         camera.add(listener);
         soundRef.current = new THREE.Audio(listener);
         const analyser = new THREE.AudioAnalyser(soundRef.current, 32);
-
-        /** GUI */
-        // const gui = new GUI();
-
-        // const colorsFolder = gui.addFolder('Colors');
-        // colorsFolder.add(params, 'red', 0, 1).onChange(function (value) {
-        //     uniforms.u_red.value = Number(value);
-        // });
-        // colorsFolder.add(params, 'green', 0, 1).onChange(function (value) {
-        //     uniforms.u_green.value = Number(value);
-        // });
-        // colorsFolder.add(params, 'blue', 0, 1).onChange(function (value) {
-        //     uniforms.u_blue.value = Number(value);
-        // });
-
-        // const bloomFolder = gui.addFolder('Bloom');
-        // bloomFolder.add(params, 'threshold', 0, 1).onChange(function (value) {
-        //     bloomPass.threshold = Number(value);
-        // });
-        // bloomFolder.add(params, 'strength', 0, 3).onChange(function (value) {
-        //     bloomPass.strength = Number(value);
-        // });
-        // bloomFolder.add(params, 'radius', 0, 1).onChange(function (value) {
-        //     bloomPass.radius = Number(value);
-        // });
 
         /** Events */
         let mouseX = 0;
