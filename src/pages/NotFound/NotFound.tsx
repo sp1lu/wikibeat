@@ -1,6 +1,12 @@
+/** Styles */
+import './NotFound.css'
+
+/** Component */
 function NotFoundPage() {
     return (
-        <p>NOT FOUND</p>
+        <div className="not-found-page">
+            <p>Page not found</p>
+        </div>
     )
 }
 
