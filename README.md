@@ -1,4 +1,4 @@
-# Videogame ui portfolio
+# Wikibeat
 ![Screenshot of the main page](https://res.cloudinary.com/duuklscys/image/upload/v1751199801/wikibeat_vhzbkb.png)
 ## 📄 Index
 * [About](#-about)
